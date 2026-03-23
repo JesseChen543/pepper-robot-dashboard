@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pepper Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header>
+      <h1 class="page-title" id="page-title">Pepper Dashboard</h1>
+      <div class="header-right">
+        <div class="battery-indicator" id="battery-indicator" style="display: none;">
+          <div class="battery-icon">
+            <div class="battery-shell">
+              <div class="battery-fill"></div>
+            </div>
+            <div class="battery-tip"></div>
+          </div>
+          <span class="battery-percentage">--</span>
+        </div>
+        <div class="status-pill" id="status-pill">[--] Connecting...</div>
+      </div>
+    </header>
+
+    <section class="grid" id="home-grid">
+      <a class="app-icon" href="motion.html" id="motion-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M4 12a1 1 0 011-1h9V8.5a.5.5 0 01.8-.4l6 4.5a.5.5 0 010 .8l-6 4.5a.5.5 0 01-.8-.4V13H5a1 1 0 01-1-1z"/>
+          </svg>
+        </span>
+        <strong>Motion</strong>
+        <small>Manual driving &amp; choreography</small>
+      </a>
+      <a class="app-icon" href="camera.html" id="camera-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+        </span>
+        <strong>Camera</strong>
+        <small>Take photos with Pepper</small>
+      </a>
+      <a class="app-icon" href="photos.html" id="photos-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 3c1.63 0 3 1.37 3 3s-1.37 3-3 3-3-1.37-3-3 1.37-3 3-3zM6 17l3-4 2.25 3 3-4L18 17H6z"/>
+          </svg>
+        </span>
+        <strong>Photos</strong>
+        <small>View your photo gallery</small>
+      </a>
+      <a class="app-icon" href="leds.html" id="leds-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M9 21h6v-1H9v1zm3-19C7.48 2 4 5.48 4 10c0 3.07 1.64 5.64 4 6.93V19c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.07c2.36-1.29 4-3.86 4-6.93 0-4.52-3.48-8-8-8zm2.13 13.21l-.63.36V18h-4v-2.43l-.63-.36C7.02 13.97 6 12.07 6 10c0-3.31 2.69-6 6-6s6 2.69 6 6c0 2.07-1.02 3.97-2.87 5.21z"/>
+          </svg>
+        </span>
+        <strong>LED Studio</strong>
+        <small>Eyes, chest &amp; ear lighting</small>
+      </a>
+      <a class="app-icon" href="health.html" id="health-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M10.5 13H8v-3h2.5V7.5h3V10H16v3h-2.5v2.5h-3V13zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+          </svg>
+        </span>
+        <strong>Diagnostics</strong>
+        <small>Hardware health &amp; system status</small>
+      </a>
+      <a class="app-icon" href="remote.html" id="remote-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M3 5v14c0 1.1.9 2 2 2h6v-2H5V5h14v5h2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm13 10h3v-3h2v3h3v2h-3v3h-2v-3h-3v-2z"/>
+          </svg>
+        </span>
+        <strong>Remote Control</strong>
+        <small>Control via mobile phone</small>
+      </a>
+      <a class="app-icon" href="video_player.html" id="video-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+          </svg>
+        </span>
+        <strong>Video Player</strong>
+        <small>Play YouTube videos on tablet</small>
+      </a>
+      <a class="app-icon" href="wifi-qr.html" id="wifi-qr-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+          </svg>
+        </span>
+        <strong>WiFi QR Code</strong>
+        <small>Scan to connect to store WiFi</small>
+      </a>
+      <a class="app-icon" href="settings.html" id="settings-app">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M19.14 12.94a7.5 7.5 0 000-1.88l1.85-1.44a.5.5 0 00.12-.63l-1.75-3.04a.5.5 0 00-.6-.23l-2.18.88a7.53 7.53 0 00-1.62-.94l-.33-2.34A.5.5 0 0014.16 3h-4.32a.5.5 0 00-.49.41l-.33 2.34a7.53 7.53 0 00-1.62.94l-2.18-.88a.5.5 0 00-.6.23L2.67 8.99a.5.5 0 00.12.63l1.85 1.44a7.5 7.5 0 000 1.88l-1.85 1.44a.5.5 0 00-.12.63l1.75 3.04a.5.5 0 00.6.23l2.18-.88c.5.4 1.05.72 1.62.94l.33 2.34a.5.5 0 00.49.41h4.32a.5.5 0 00.49-.41l.33-2.34a7.53 7.53 0 001.62-.94l2.18.88a.5.5 0 00.6-.23l1.75-3.04a.5.5 0 00-.12-.63l-1.85-1.44zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/>
+          </svg>
+        </span>
+        <strong>Settings</strong>
+        <small>Adjust audio, volume &amp; network</small>
+      </a>
+    </section>
+
+
+    <div class="voice-bar">
+      <button class="voice-button" id="voice-button">
+        <span class="dot"></span>
+        <span class="voice-text">TAP TO TALK</span>
+      </button>
+    </div>
+
+    <!-- Dance Status Popup -->
+    <div class="dance-popup" id="dance-popup" style="display: none;">
+      <div class="dance-popup-content">
+        <div class="dance-popup-icon">💃</div>
+        <h2 class="dance-popup-title" id="dance-popup-title">Performing Dance</h2>
+        <p class="dance-popup-message" id="dance-popup-message">Please wait...</p>
+        <button class="dance-stop-btn" id="dance-stop-btn">⏹ Stop Dance</button>
+      </div>
+    </div>
+
+    <script src="js/home.js?v=8"></script>
+    <script src="js/dance-popup.js?v=5"></script>
+  </body>
+</html>
+

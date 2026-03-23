@@ -1,0 +1,29 @@
+# Requirements for PC-side Python 3.x Development Tools
+# Install with: pip install -r requirements-pc.txt
+
+# Web Framework
+flask>=2.0.0
+
+# Audio Processing
+pyaudio>=0.2.11
+numpy>=1.19.0
+
+# Computer Vision (for image processing, ROS integration)
+opencv-python>=4.5.0
+
+# GUI Framework (for vision_client PyQt dashboard)
+PyQt6>=6.0.0
+pillow>=10.0.0
+
+# SSH/Remote Control
+paramiko>=2.7.0
+
+# WebSocket Support
+websocket-client>=1.0.0
+websocket-server>=0.6.1
+
+# ROS Python 3 support (if using ROS2)
+# rospy  # Install via ROS2 setup instead
+
+# Utilities
+argparse  # Included in Python 3.2+, but listed for clarity

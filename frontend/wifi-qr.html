@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Connect to WiFi - Pepper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .wifi-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .wifi-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .wifi-instructions {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .qr-code-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    #qrcode {
+      display: inline-block;
+    }
+
+    .wifi-details {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    .wifi-detail {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .wifi-detail:last-child {
+      border-bottom: none;
+    }
+
+    .wifi-label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .wifi-value {
+      color: #333;
+      font-family: monospace;
+      font-size: 1.1rem;
+    }
+
+    .edit-button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .edit-button:hover {
+      background: #45a049;
+    }
+
+    .config-form {
+      display: none;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .config-form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #45a049;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-button-fixed">← Back</a>
+  <header>
+    <h1 class="page-title" style="margin-top: 40px;">WiFi QR Code</h1>
+    <div class="header-right">
+      <div class="status-pill" id="status-pill">[OK] Ready</div>
+    </div>
+  </header>
+
+  <div class="wifi-container">
+    <div id="display-section">
+      <h2 class="wifi-title">Scan to Connect</h2>
+      <p class="wifi-instructions">
+        Open your camera app and point it at the QR code below to automatically connect to our store WiFi
+      </p>
+
+      <div class="qr-code-container">
+        <div id="qrcode"></div>
+      </div>
+
+      <div class="wifi-details">
+        <div class="wifi-detail">
+          <span class="wifi-label">Network Name:</span>
+          <span class="wifi-value" id="display-ssid">StoreWiFi</span>
+        </div>
+        <div class="wifi-detail">
+          <span class="wifi-label">Password:</span>
+          <span class="wifi-value" id="display-password">••••••••</span>
+        </div>
+        <div class="wifi-detail">
+          <span class="wifi-label">Security:</span>
+          <span class="wifi-value" id="display-security">WPA/WPA2</span>
+        </div>
+      </div>
+
+      <button class="edit-button" onclick="showConfigForm()">Change WiFi Settings</button>
+
+      <details style="margin: 2rem auto 0; max-width: 500px; text-align: left;">
+        <summary style="cursor: pointer; font-weight: bold; color: #666; font-size: 0.9rem;">🔍 Show Technical Details</summary>
+        <pre id="wifi-string-display" style="margin-top: 0.5rem; padding: 0.75rem; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; overflow-x: auto; font-size: 0.8rem; color: #333;"></pre>
+      </details>
+    </div>
+
+    <div class="config-form" id="config-form">
+      <h3 style="margin-bottom: 1.5rem;">Configure WiFi</h3>
+
+      <div class="form-group">
+        <label for="ssid">Network Name (SSID)</label>
+        <input type="text" id="ssid" placeholder="Enter WiFi name" value="StoreWiFi">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" id="password" placeholder="Enter WiFi password" value="">
+      </div>
+
+      <div class="form-group">
+        <label for="security">Security Type</label>
+        <select id="security">
+          <option value="WPA">WPA/WPA2</option>
+          <option value="WEP">WEP</option>
+          <option value="">Open (No Password)</option>
+        </select>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn btn-primary" onclick="generateQRCode()">Generate QR Code</button>
+        <button class="btn btn-secondary" onclick="hideConfigForm()">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/qrcode.min.js"></script>
+  <script>
+    // Load saved WiFi config from localStorage
+    function loadConfig() {
+      const saved = localStorage.getItem('wifiConfig');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error('Failed to parse saved config:', e);
+        }
+      }
+      return {
+        ssid: 'StoreWiFi',
+        password: 'password123',
+        security: 'WPA'
+      };
+    }
+
+    // Save WiFi config to localStorage
+    function saveConfig(config) {
+      localStorage.setItem('wifiConfig', JSON.stringify(config));
+    }
+
+    // Generate WiFi QR code string
+    function getWiFiString(ssid, password, security) {
+      // Escape special characters according to WiFi QR code spec
+      // Need to escape: \ ; , " :
+      function escapeWiFi(str) {
+        return str
+          .replace(/\\/g, '\\\\')  // Backslash first
+          .replace(/;/g, '\\;')
+          .replace(/,/g, '\\,')
+          .replace(/"/g, '\\"')
+          .replace(/:/g, '\\:');
+      }
+
+      var escapedSsid = escapeWiFi(ssid);
+      var escapedPassword = escapeWiFi(password);
+
+      // Format: WIFI:T:<type>;S:<ssid>;P:<password>;H:<hidden>;;
+      // Security type should be WPA, WEP, or empty (nopass)
+      var secType = security || 'nopass';
+
+      return 'WIFI:T:' + secType + ';S:' + escapedSsid + ';P:' + escapedPassword + ';;';
+    }
+
+    // Generate and display QR code using Google Charts API
+    function generateQRCode() {
+      const ssid = document.getElementById('ssid').value.trim();
+      const password = document.getElementById('password').value;
+      const security = document.getElementById('security').value;
+
+      console.log('Generating QR code for:', { ssid, password, security });
+
+      if (!ssid) {
+        alert('Please enter a network name (SSID)');
+        return;
+      }
+
+      if (security !== '' && !password) {
+        alert('Please enter a password for secured network');
+        return;
+      }
+
+      // Save configuration
+      saveConfig({ ssid: ssid, password: password, security: security });
+
+      // Update display
+      document.getElementById('display-ssid').textContent = ssid;
+      document.getElementById('display-password').textContent = password ? '••••••••' : 'None';
+      document.getElementById('display-security').textContent =
+        security === 'WPA' ? 'WPA/WPA2' :
+        security === 'WEP' ? 'WEP' :
+        'Open (No Password)';
+
+      // Generate QR code
+      const wifiString = getWiFiString(ssid, password, security);
+      console.log('WiFi string:', wifiString);
+
+      // Display the WiFi string for debugging
+      const wifiStringDisplay = document.getElementById('wifi-string-display');
+      if (wifiStringDisplay) {
+        wifiStringDisplay.textContent = wifiString;
+      }
+
+      const qrcodeElement = document.getElementById('qrcode');
+      qrcodeElement.innerHTML = ''; // Clear previous QR code
+
+      try {
+        // Generate QR code using qrcode.js library (works offline!)
+        new QRCode(qrcodeElement, {
+          text: wifiString,
+          width: 300,
+          height: 300,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H  // High error correction for better scanning
+        });
+
+        console.log('QR code generated successfully');
+        console.log('Try scanning this WiFi string with your phone:');
+        console.log(wifiString);
+      } catch (err) {
+        console.error('Failed to generate QR code:', err);
+        qrcodeElement.innerHTML = '<p style="color: red;">Failed to generate QR code: ' + err.message + '</p>';
+      }
+
+      // Hide form, show display
+      hideConfigForm();
+    }
+
+    function showConfigForm() {
+      // Load current config into form
+      const config = loadConfig();
+      document.getElementById('ssid').value = config.ssid;
+      document.getElementById('password').value = config.password;
+      document.getElementById('security').value = config.security;
+
+      // Show form
+      document.getElementById('display-section').style.display = 'none';
+      document.getElementById('config-form').classList.add('active');
+    }
+
+    function hideConfigForm() {
+      document.getElementById('config-form').classList.remove('active');
+      document.getElementById('display-section').style.display = 'block';
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      const config = loadConfig();
+      document.getElementById('ssid').value = config.ssid;
+      document.getElementById('password').value = config.password;
+      document.getElementById('security').value = config.security;
+
+      // Generate initial QR code
+      generateQRCode();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pepper Remote - Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="./css/mobile.css?v=6">
+    <style>
+      /* Inline critical CSS to prevent blank screen */
+      body { margin: 0; padding: 0; font-family: sans-serif; }
+      .mobile-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; }
+    </style>
+  </head>
+  <body>
+    <header class="mobile-header">
+      <h1>🤖 Pepper Remote</h1>
+      <div class="status-pill" id="status-pill">[--] Connecting...</div>
+    </header>
+
+    <nav class="mobile-nav">
+      <button class="nav-btn active" data-page="motion">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span>Motion</span>
+      </button>
+      <button class="nav-btn" data-page="movement">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 12a1 1 0 011-1h9V8.5a.5.5 0 01.8-.4l6 4.5a.5.5 0 010 .8l-6 4.5a.5.5 0 01-.8-.4V13H5a1 1 0 01-1-1z"/>
+        </svg>
+        <span>Move</span>
+      </button>
+      <button class="nav-btn" data-page="camera">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+        <span>Camera</span>
+      </button>
+      <button class="nav-btn" data-page="photos">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM6 17l3-4 2.25 3 3-4L18 17H6z"/>
+        </svg>
+        <span>Photos</span>
+      </button>
+      <button class="nav-btn" data-page="tts">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+        <span>TTS</span>
+      </button>
+      <button class="nav-btn" data-page="leds">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 21h6v-1H9v1zm3-19C7.48 2 4 5.48 4 10c0 3.07 1.64 5.64 4 6.93V19c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.07c2.36-1.29 4-3.86 4-6.93 0-4.52-3.48-8-8-8zm2.13 13.21l-.63.36V18h-4v-2.43l-.63-.36C7.02 13.97 6 12.07 6 10c0-3.31 2.69-6 6-6s6 2.69 6 6c0 2.07-1.02 3.97-2.87 5.21z"/>
+        </svg>
+        <span>LEDs</span>
+      </button>
+      <button class="nav-btn" data-page="navigation">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+        </svg>
+        <span>Navigate</span>
+      </button>
+      <button class="nav-btn" data-page="video">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        <span>Video</span>
+      </button>
+      <button class="nav-btn" data-page="settings">
+        <svg viewBox="0 0 24 24">
+          <path d="M19.14 12.94a7.5 7.5 0 000-1.88l1.85-1.44a.5.5 0 00.12-.63l-1.75-3.04a.5.5 0 00-.6-.23l-2.18.88a7.53 7.53 0 00-1.62-.94l-.33-2.34A.5.5 0 0014.16 3h-4.32a.5.5 0 00-.49.41l-.33 2.34a7.53 7.53 0 00-1.62.94l-2.18-.88a.5.5 0 00-.6.23L2.67 8.99a.5.5 0 00.12.63l1.85 1.44a7.5 7.5 0 000 1.88l-1.85 1.44a.5.5 0 00-.12.63l1.75 3.04a.5.5 0 00.6.23l2.18-.88c.5.4 1.05.72 1.62.94l.33 2.34a.5.5 0 00.49.41h4.32a.5.5 0 00.49-.41l.33-2.34a7.53 7.53 0 001.62-.94l2.18.88a.5.5 0 00.6-.23l1.75-3.04a.5.5 0 00-.12-.63l-1.85-1.44zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <main class="mobile-content">
+      <!-- Motion Page -->
+      <div class="page active" id="motion-page">
+        <h2>Motion Control</h2>
+
+        <!-- Dances Section -->
+        <div class="control-section dances-section">
+          <h3>🎉 Dances</h3>
+          <div class="dance-grid">
+            <button class="dance-btn christmas-dance-btn" data-dance="christmas">
+              <span class="dance-icon">🎄</span>
+              <span class="dance-name">Christmas Dance</span>
+              <span class="dance-duration">~20s</span>
+            </button>
+            <button class="dance-btn birthday-dance-btn" data-dance="birthday">
+              <span class="dance-icon">🎂</span>
+              <span class="dance-name">Birthday Dance</span>
+              <span class="dance-duration">~30s</span>
+            </button>
+            <button class="dance-btn kungfu-dance-btn" data-dance="kungfu">
+              <span class="dance-icon">🥋</span>
+              <span class="dance-name">Kung Fu Dance</span>
+              <span class="dance-duration">~1m</span>
+            </button>
+            <button class="dance-btn robot-dance-btn" data-dance="robot">
+              <span class="dance-icon">🤖</span>
+              <span class="dance-name">Robot Dance</span>
+              <span class="dance-duration">~30s</span>
+            </button>
+            <button class="dance-btn gangnam-dance-btn" data-dance="gangnam">
+              <span class="dance-icon">🐴</span>
+              <span class="dance-name">Gangnam Style</span>
+              <span class="dance-duration">~40s</span>
+            </button>
+            <button class="dance-btn chacha-dance-btn" data-dance="chacha">
+              <span class="dance-icon">💃</span>
+              <span class="dance-name">Cha Cha Slide</span>
+              <span class="dance-duration">~55s</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Quick Postures</h3>
+          <div class="posture-buttons">
+            <button class="action-btn" data-command="posture_stand">Stand</button>
+            <button class="action-btn" data-command="posture_sit">Sit</button>
+            <button class="action-btn" data-command="posture_crouch">Crouch</button>
+            <button class="action-btn" data-command="posture_rest">Rest</button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Gestures <span id="animation-status" class="animation-status"></span></h3>
+          <div class="gesture-grid">
+            <!-- Greetings & Social -->
+            <button class="gesture-btn" data-gesture="hey">👋 Hey</button>
+            <button class="gesture-btn" data-gesture="bow">🙇 Bow</button>
+            <button class="gesture-btn" data-gesture="salute">🫡 Salute</button>
+            <button class="gesture-btn" data-gesture="ask_attention">🙋 Get Attention</button>
+            <button class="gesture-btn" data-gesture="hug">🤗 Hug</button>
+            <button class="gesture-btn" data-gesture="kisses">💋 Kisses</button>
+
+            <!-- Emotions & Mood -->
+            <button class="gesture-btn" data-gesture="angry">😠 Angry</button>
+            <button class="gesture-btn" data-gesture="surprise">😲 Surprised</button>
+            <button class="gesture-btn" data-gesture="amused">😄 Amused</button>
+            <button class="gesture-btn" data-gesture="happy">😊 Happy</button>
+            <button class="gesture-btn" data-gesture="interested">🤔 Interested</button>
+            <button class="gesture-btn" data-gesture="laugh">😂 Laugh</button>
+            <button class="gesture-btn" data-gesture="mocker">😜 Mocker</button>
+            <button class="gesture-btn" data-gesture="sneeze">🤧 Sneeze</button>
+            <button class="gesture-btn" data-gesture="shy">🙈 Shy</button>
+            <button class="gesture-btn" data-gesture="joy">🎉 Joy</button>
+            <button class="gesture-btn" data-gesture="whisper">🤫 Whisper</button>
+            <button class="gesture-btn" data-gesture="sad">😢 Sad</button>
+
+            <!-- Performances & Celebration -->
+            <button class="gesture-btn" data-gesture="winner">🏆 Winner</button>
+            <button class="gesture-btn" data-gesture="funny_dancer">💃 Funny Dancer</button>
+            <button class="gesture-btn" data-gesture="air_guitar">🎸 Air Guitar</button>
+            <button class="gesture-btn" data-gesture="bandmaster">🎼 Bandmaster</button>
+            <button class="gesture-btn" data-gesture="drink">🍻 Cheers</button>
+            <button class="gesture-btn" data-gesture="call_someone">📞 Call Someone</button>
+
+            <!-- Gestures & Tricks -->
+            <button class="gesture-btn" data-gesture="angry_gesture">💢 Angry Gesture</button>
+            <button class="gesture-btn" data-gesture="shake">🥶 Shake</button>
+            <button class="gesture-btn" data-gesture="touch_head">👆 Touch Head</button>
+            <button class="gesture-btn" data-gesture="hide">🙈 Hide</button>
+            <button class="gesture-btn" data-gesture="hot">🥵 Too Hot</button>
+            <button class="gesture-btn" data-gesture="stretch">🧘 Stretch</button>
+            <button class="gesture-btn" data-gesture="show_muscles">💪 Show Muscles</button>
+            <button class="gesture-btn" data-gesture="scratch">🐕 Scratch</button>
+            <button class="gesture-btn" data-gesture="relaxation">😌 Relaxation</button>
+
+            <!-- Adventure & Characters -->
+            <button class="gesture-btn" data-gesture="flying">🚀 Flying</button>
+            <button class="gesture-btn" data-gesture="take_picture">📸 Take Picture</button>
+            <button class="gesture-btn" data-gesture="taxi">🚕 Taxi</button>
+            <button class="gesture-btn" data-gesture="wake_up">⏰ Wake Up</button>
+            <button class="gesture-btn" data-gesture="drive_car">🚗 Drive Car</button>
+            <button class="gesture-btn" data-gesture="helicopter">🚁 Helicopter</button>
+            <button class="gesture-btn" data-gesture="knock_eye">👁️ Knock Eye</button>
+            <button class="gesture-btn" data-gesture="robot">🤖 Robot</button>
+            <button class="gesture-btn" data-gesture="monster">👹 Monster</button>
+            <button class="gesture-btn" data-gesture="mystical">✨ Mystical</button>
+            <button class="gesture-btn" data-gesture="zombie">🧟 Zombie</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movement Page -->
+      <div class="page" id="movement-page">
+        <h2>Movement Control</h2>
+
+        <div class="control-section">
+          <h3>Direction Controls</h3>
+          <div class="setting-item">
+            <label for="movement-speed-slider">Movement Speed:</label>
+            <input type="range" id="movement-speed-slider" min="0.5" max="3.0" step="0.1" value="1.0">
+            <span id="movement-speed-value">1.0×</span>
+          </div>
+          <div class="movement-controls">
+            <div class="movement-row">
+              <button class="movement-btn" data-action="forward">⬆️</button>
+            </div>
+            <div class="movement-row">
+              <button class="movement-btn" data-action="turn_left">⬅️</button>
+              <button class="movement-btn" data-action="turn_right">➡️</button>
+            </div>
+            <div class="movement-row">
+              <button class="movement-btn" data-action="backward">⬇️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Camera Page -->
+      <div class="page" id="camera-page">
+        <div class="camera-compact-layout">
+          <!-- Camera Preview (Compact) -->
+          <div class="camera-preview-compact" id="camera-preview">
+            <div class="camera-placeholder">Camera feed</div>
+          </div>
+
+          <!-- Head Control -->
+          <div class="head-control-compact">
+            <div class="head-control-pad">
+              <button class="head-btn head-up" data-head="up">⬆️</button>
+              <div class="head-row">
+                <button class="head-btn head-left" data-head="left">⬅️</button>
+                <button class="head-btn head-center" data-head="center">⚪</button>
+                <button class="head-btn head-right" data-head="right">➡️</button>
+              </div>
+              <button class="head-btn head-down" data-head="down">⬇️</button>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="camera-actions-compact">
+            <button class="camera-action-btn" id="capture-btn">
+              <span>📷</span>
+              <span>Take Photo</span>
+            </button>
+            <button class="camera-action-btn" id="static-head-btn">
+              <span>🔒</span>
+              <span>Static Head</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="countdown-display" id="countdown-display"></div>
+      </div>
+
+      <!-- Photos Page -->
+      <div class="page" id="photos-page">
+        <h2>Photo Gallery</h2>
+
+        <div class="photos-grid" id="photos-grid">
+          <p class="placeholder-text">No photos yet. Take some with the camera!</p>
+        </div>
+
+        <div class="photos-actions">
+          <button class="action-btn" id="refresh-photos-btn">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- TTS Page -->
+      <div class="page" id="tts-page">
+        <h2>Text to Speech</h2>
+
+        <div class="control-section">
+          <h3>Quick Phrases</h3>
+          <div class="tts-quick-phrases">
+            <button class="tts-phrase-btn" data-phrase="Hello, how can I help you?">Hello</button>
+            <button class="tts-phrase-btn" data-phrase="Nice to meet you!">Nice to meet you</button>
+            <button class="tts-phrase-btn" data-phrase="Thank you very much!">Thank you</button>
+            <button class="tts-phrase-btn" data-phrase="You're welcome!">You're welcome</button>
+            <button class="tts-phrase-btn" data-phrase="Goodbye!">Goodbye</button>
+            <button class="tts-phrase-btn" data-phrase="See you later!">See you later</button>
+            <button class="tts-phrase-btn" data-phrase="Please follow me.">Follow me</button>
+            <button class="tts-phrase-btn" data-phrase="Let me show you something.">Show you</button>
+            <button class="tts-phrase-btn" data-phrase="That's very interesting!">Interesting</button>
+            <button class="tts-phrase-btn" data-phrase="I understand.">I understand</button>
+            <button class="tts-phrase-btn" data-phrase="Please wait a moment.">Wait</button>
+            <button class="tts-phrase-btn" data-phrase="I'm here to help!">Here to help</button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>WonderByte Introduction</h3>
+
+          <div class="wb-category">
+            <h4>Company Overview</h4>
+            <div class="tts-quick-phrases">
+              <button class="tts-phrase-btn" data-phrase="Welcome to Wonder Byte Technology! We're pioneering embodied intelligence and the future experience economy, powered by our proprietary AI Agent Platform.">Company Mission</button>
+              <button class="tts-phrase-btn" data-phrase="Wonder Byte was founded in 2019 and is headquartered in Brisbane, Australia. We're bringing AI-powered experiences to life through our innovative robotics and automation solutions.">About WonderByte</button>
+              <button class="tts-phrase-btn" data-phrase="From our roots in cloud technology to launching the Wonder Agent platform in 2023, and now establishing Australia's first AI-powered experience store in 2025, we're constantly innovating.">Our Journey</button>
+            </div>
+          </div>
+
+          <div class="wb-category">
+            <h4>AI Technology</h4>
+            <div class="tts-quick-phrases">
+              <button class="tts-phrase-btn" data-phrase="Our Wonder Agent platform is a multi-agent system powered by GPT-4 and advanced large language models. It enables low-code generation and supports text, voice, and multimodal interaction.">Wonder Agent</button>
+              <button class="tts-phrase-btn" data-phrase="Wonder Connect is our collaboration framework that enables multiple AI agents to work together seamlessly, handling complex tasks through cross-device orchestration.">Wonder Connect</button>
+              <button class="tts-phrase-btn" data-phrase="Wonder Bot is our embodied intelligence system with a four-agent closed loop for sensing, annotation, interaction, and learning. It enables robots like me to continuously learn and improve!">Wonder Bot</button>
+              <button class="tts-phrase-btn" data-phrase="Our large vision foundation model is trained on massive diverse vision data with multimodal capabilities, helping robots understand the visual world and make intelligent decisions.">Vision AI</button>
+            </div>
+          </div>
+
+          <div class="wb-category">
+            <h4>Experience Store Products</h4>
+            <div class="tts-quick-phrases">
+              <button class="tts-phrase-btn" data-phrase="Our Cocktail Robot can mix over 70 classic and signature cocktails with commercial-grade precision and automatic cleaning cycles. Soon it will feature interactive voice recommendations from our AI mixologist!">Cocktail Robot</button>
+              <button class="tts-phrase-btn" data-phrase="The Ice Cream Robot offers two smoothie and two soft-serve flavors with sealed, contaminant-free, contactless service for a hygienic and delightful experience.">Ice Cream Robot</button>
+              <button class="tts-phrase-btn" data-phrase="Our Coffee Robot crafts 10 different styles of coffee using specialty-grade beans. The robotic arm can even create latte art manually or from images!">Coffee Robot</button>
+              <button class="tts-phrase-btn" data-phrase="The Kitchen Automation Arm demonstrates fully automated frying and boiling with temperature-controlled baskets and smart timers. It's perfect for quick-service or ghost kitchens!">Kitchen Arm</button>
+              <button class="tts-phrase-btn" data-phrase="Our 3D Printing Service offers end-to-end printing from concept to finishing using eco-friendly, compostable PLA+ composite material. We accept STL, OBJ, and STEP files!">3D Printing</button>
+            </div>
+          </div>
+
+          <div class="wb-category">
+            <h4>What I Can Do</h4>
+            <div class="tts-quick-phrases">
+              <button class="tts-phrase-btn" data-phrase="I'm Pepper, the official Wonder Byte digital assistant robot! I can greet customers, explain our products, perform expressive animations, and even take photos for you to keep as souvenirs.">About Pepper</button>
+              <button class="tts-phrase-btn" data-phrase="I have access to Wonder Byte's product knowledge and can provide personalized information about all our robotics and AI solutions. Feel free to ask me anything!">My Capabilities</button>
+              <button class="tts-phrase-btn" data-phrase="I can help you navigate the experience store, answer questions about our technology, and demonstrate how AI and robotics are shaping the future of customer experiences.">How I Help</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Custom Text</h3>
+          <div class="tts-custom-input">
+            <textarea id="tts-input" placeholder="Enter text for Pepper to speak..." rows="4"></textarea>
+            <button class="action-btn" id="tts-speak-btn">🔊 Speak</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEDs Page -->
+      <div class="page" id="leds-page">
+        <h2>LED Studio</h2>
+
+        <div class="control-section">
+          <h3>Eyes</h3>
+          <p class="led-description">Control Pepper's facial LEDs</p>
+          <div class="led-actions">
+            <button class="led-btn" data-led-group="FaceLeds" data-led-action="on">On</button>
+            <button class="led-btn led-btn-off" data-led-group="FaceLeds" data-led-action="off">Off</button>
+            <button class="led-btn" data-led-group="FaceLeds" data-led-action="fade" data-intensity="0.2" data-duration="0.6">Dim</button>
+            <button class="led-btn" data-led-group="FaceLeds" data-led-action="fade" data-intensity="1.0" data-duration="0.6">Bright</button>
+            <button class="led-btn led-btn-special" data-led-group="FaceLeds" data-led-action="rotate" data-color="#00aaff" data-duration="2">Spin Cyan</button>
+            <button class="led-btn led-btn-special" data-led-group="FaceLeds" data-led-action="rotate" data-color="#ff00aa" data-duration="2">Spin Magenta</button>
+            <button class="led-btn" data-led-group="FaceLeds" data-led-action="random">Random Color</button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Chest</h3>
+          <p class="led-description">Set chest LED color or brightness</p>
+          <div class="led-actions">
+            <button class="led-btn" data-led-group="ChestLeds" data-led-action="on">On</button>
+            <button class="led-btn led-btn-off" data-led-group="ChestLeds" data-led-action="off">Off</button>
+            <button class="led-btn" data-led-group="ChestLeds" data-led-action="fade" data-intensity="0.4" data-duration="0.6">Dim</button>
+            <button class="led-btn" data-led-group="ChestLeds" data-led-action="fade" data-intensity="1.0" data-duration="0.6">Bright</button>
+          </div>
+          <div class="led-swatches">
+            <button class="led-swatch" data-led-group="ChestLeds" data-led-action="color" data-color="#ff3355" style="background-color: #ff3355;"></button>
+            <button class="led-swatch" data-led-group="ChestLeds" data-led-action="color" data-color="#ffb400" style="background-color: #ffb400;"></button>
+            <button class="led-swatch" data-led-group="ChestLeds" data-led-action="color" data-color="#34d399" style="background-color: #34d399;"></button>
+            <button class="led-swatch" data-led-group="ChestLeds" data-led-action="color" data-color="#38bdf8" style="background-color: #38bdf8;"></button>
+            <button class="led-swatch" data-led-group="ChestLeds" data-led-action="color" data-color="#818cf8" style="background-color: #818cf8;"></button>
+            <button class="led-swatch" data-led-group="ChestLeds" data-led-action="color" data-color="#f472b6" style="background-color: #f472b6;"></button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Ears</h3>
+          <p class="led-description">Control ear ring LEDs</p>
+          <div class="led-actions">
+            <button class="led-btn" data-led-group="EarLeds" data-led-action="on">On</button>
+            <button class="led-btn led-btn-off" data-led-group="EarLeds" data-led-action="off">Off</button>
+            <button class="led-btn" data-led-group="EarLeds" data-led-action="fade" data-intensity="0.6" data-duration="0.8">Gentle Glow</button>
+            <button class="led-btn" data-led-group="EarLeds" data-led-action="fade" data-intensity="1.0" data-duration="0.8">Full Bright</button>
+            <button class="led-btn led-btn-special" data-led-group="EarLeds" data-led-action="rasta" data-duration="4">Trio Pulse</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Page -->
+      <div class="page" id="navigation-page">
+        <h2>Restaurant Navigation</h2>
+
+        <div class="control-section">
+          <h3>Quick Locations</h3>
+          <p class="nav-description">Navigate to predefined locations in the restaurant</p>
+          <div class="nav-location-grid">
+            <button class="nav-location-btn" data-location="home">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-location-btn" data-location="coffee_robot">
+              <span class="nav-icon">☕</span>
+              <span class="nav-label">Coffee Robot</span>
+            </button>
+            <button class="nav-location-btn" data-location="kitchen">
+              <span class="nav-icon">👩‍🍳</span>
+              <span class="nav-label">Kitchen</span>
+            </button>
+            <button class="nav-location-btn" data-location="printer_3d">
+              <span class="nav-icon">🖨️</span>
+              <span class="nav-label">3D Printer</span>
+            </button>
+            <button class="nav-location-btn" data-location="ice_cream_machine">
+              <span class="nav-icon">🍦</span>
+              <span class="nav-label">Ice Cream Machine</span>
+            </button>
+            <button class="nav-location-btn" data-location="cocktail_machine">
+              <span class="nav-icon">🍹</span>
+              <span class="nav-label">Cocktail Machine</span>
+            </button>
+            <button class="nav-location-btn" data-location="entrance">
+              <span class="nav-icon">🚪</span>
+              <span class="nav-label">Entrance</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Navigation Control</h3>
+          <div class="nav-actions">
+            <button class="action-btn" id="nav-cancel-btn">⛔ Cancel Navigation</button>
+            <button class="action-btn" id="nav-return-home-btn">🏠 Return to Home</button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Navigation Status</h3>
+          <div class="nav-status">
+            <div class="status-item">
+              <span class="status-label">Localized:</span>
+              <span class="status-value" id="nav-localized-status">--</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Navigating:</span>
+              <span class="status-value" id="nav-navigating-status">--</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Position:</span>
+              <span class="status-value" id="nav-position-status">--</span>
+            </div>
+          </div>
+          <button class="action-btn" id="nav-refresh-status-btn">🔄 Refresh Status</button>
+        </div>
+
+        <div class="control-section">
+          <h3>Advanced</h3>
+          <div class="nav-actions">
+            <button class="action-btn" id="nav-start-localization-btn">📍 Start Localization</button>
+            <button class="action-btn" id="nav-set-home-btn">🏠 Set Current as Home</button>
+            <button class="action-btn" id="nav-get-position-btn">📍 Get Position</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Page -->
+      <div class="page" id="video-page">
+        <h2>Video Player</h2>
+
+        <div class="control-section">
+          <h3>Play YouTube Video on Tablet</h3>
+          <p class="video-description">Enter a YouTube URL to play on Pepper's tablet display.</p>
+
+          <div class="video-input-group">
+            <input type="text" id="video-url-input" class="video-url-input"
+                   placeholder="https://www.youtube.com/watch?v=..."
+                   value="https://www.youtube.com/watch?v=74iDgbjTYNc">
+            <button class="action-btn video-play-btn" id="video-play-btn">▶ Play on Tablet</button>
+          </div>
+
+          <div class="video-presets">
+            <h4>Quick Presets</h4>
+            <div class="preset-buttons">
+              <button class="preset-btn" data-url="https://www.youtube.com/watch?v=74iDgbjTYNc">WonderByte Promo</button>
+              <button class="preset-btn" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Demo Video</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Current Status</h3>
+          <div class="video-status-info">
+            <div class="status-item">
+              <span class="status-label">Tablet Status:</span>
+              <span class="status-value" id="video-tablet-status">--</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Current Video:</span>
+              <span class="status-value video-id-display" id="video-current-id">74iDgbjTYNc</span>
+            </div>
+          </div>
+
+          <!-- Download Progress -->
+          <div class="video-progress-container" id="video-progress-container" style="display: none; margin-top: 15px;">
+            <div class="progress-info" style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9em;">
+              <span id="video-progress-text">Downloading...</span>
+              <span id="video-progress-speed"></span>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; height: 20px;">
+              <div id="video-progress-bar" style="height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h3>Instructions</h3>
+          <ul class="video-instructions">
+            <li>1. Enter a YouTube URL or select a preset</li>
+            <li>2. Tap "Play on Tablet" to send to Pepper's display</li>
+            <li>3. The video will autoplay and loop on the tablet</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div class="page" id="settings-page">
+        <h2>Settings</h2>
+
+        <div class="settings-section">
+          <h3>Connection</h3>
+          <div class="setting-item">
+            <label>Pepper IP Address:</label>
+            <input type="text" id="pepper-ip" placeholder="e.g. 192.168.1.100" readonly>
+          </div>
+          <div class="setting-item">
+            <label>Connection Status:</label>
+            <span id="connection-status">Connecting...</span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Voice Controls</h3>
+          <div class="setting-item">
+            <label for="volume-slider">Volume:</label>
+            <input type="range" id="volume-slider" min="0" max="100" value="50">
+            <span id="volume-value">50%</span>
+          </div>
+          <div class="setting-item">
+            <label for="speed-slider">Speed:</label>
+            <input type="range" id="speed-slider" min="50" max="200" value="100">
+            <span id="speed-value">100%</span>
+          </div>
+          <div class="setting-item">
+            <label for="pitch-slider">Pitch:</label>
+            <input type="range" id="pitch-slider" min="50" max="400" value="100">
+            <span id="pitch-value">1.0×</span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Robot Behavior</h3>
+          <div class="setting-item setting-toggle">
+            <div class="setting-toggle-content">
+              <label for="head-tracking-toggle">Head Tracking</label>
+              <p class="setting-description">Automatically follow and look at people</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="head-tracking-toggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>About</h3>
+          <p>Pepper Mobile Remote Control</p>
+          <p class="version-text">Version 1.0.0</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Gesture Modal -->
+    <div class="gesture-modal" id="gesture-modal">
+      <div class="gesture-modal-content">
+        <div class="gesture-spinner"></div>
+        <p class="gesture-modal-text" id="gesture-modal-text">Performing gesture...</p>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <p class="toast-text" id="toast-text"></p>
+    </div>
+
+    <!-- Obstacle Warning -->
+    <div class="obstacle-warning" id="obstacle-warning">
+      <div class="obstacle-warning-content">
+        <div class="obstacle-warning-icon">⚠️</div>
+        <div class="obstacle-warning-text">
+          <strong>Movement Blocked</strong>
+          <p>Obstacle detected in path</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dance Status Popup -->
+    <div class="dance-popup" id="dance-popup" style="display: none;">
+      <div class="dance-popup-content">
+        <div class="dance-popup-icon">💃</div>
+        <h2 class="dance-popup-title" id="dance-popup-title">Performing Dance</h2>
+        <p class="dance-popup-message" id="dance-popup-message">Please wait...</p>
+        <button class="dance-stop-btn" id="dance-stop-btn">⏹ Stop Dance</button>
+      </div>
+    </div>
+
+    <script src="js/mobile.js?v=8"></script>
+    <script src="js/dance-popup.js?v=5"></script>
+  </body>
+</html>

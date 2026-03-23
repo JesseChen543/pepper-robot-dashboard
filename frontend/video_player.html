@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Video Player - Pepper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-button {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+    .video-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+    }
+    video {
+      width: 100%;
+      border-radius: 12px;
+      background: #222;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-button">← Back</a>
+
+  <div class="video-container">
+    <video id="player" controls autoplay>
+      <source id="videoSource" src="" type="video/mp4">
+      Your browser does not support video playback.
+    </video>
+    <div class="status" id="status">Ready</div>
+  </div>
+
+  <script>
+    (function() {
+      var player = document.getElementById("player");
+      var videoSource = document.getElementById("videoSource");
+      var statusEl = document.getElementById("status");
+      var ws;
+      var reconnectDelay = 3000;
+
+      function setStatus(msg) {
+        if (statusEl) {
+          statusEl.textContent = msg;
+        }
+      }
+
+      function loadVideoFromSource(sourceUrl, videoId) {
+        if (!sourceUrl) {
+          setStatus("No video source provided");
+          return;
+        }
+
+        // Cache-bust to ensure the tablet fetches fresh bytes
+        var playLabel = videoId || sourceUrl;
+        var cacheBuster = sourceUrl.indexOf("?") === -1 ? "?t=" + Date.now() : "&t=" + Date.now();
+        videoSource.src = sourceUrl + cacheBuster;
+        player.load();
+        setStatus("Loading: " + playLabel);
+
+        player.onloadeddata = function() {
+          setStatus("Playing: " + playLabel);
+        };
+
+        player.onerror = function() {
+          setStatus("Error loading video: " + playLabel);
+        };
+      }
+
+      function handleSetVideo(data) {
+        var videoId = data.video_id || null;
+        var localUrl = data.local_url || (videoId ? ("/videos/" + videoId + ".mp4") : null);
+        if (data.cached === false) {
+          setStatus("Downloading video: " + (videoId || "pending"));
+          return;
+        }
+        loadVideoFromSource(localUrl, videoId);
+      }
+
+      function connect() {
+        try {
+          var host = window.location.hostname || "198.18.0.1";
+          ws = new WebSocket("ws://" + host + ":9001");
+
+          ws.onopen = function() {
+            setStatus("Connected - waiting for video");
+          };
+
+          ws.onmessage = function(evt) {
+            try {
+              var data = JSON.parse(evt.data);
+              if (!data || !data.type) {
+                return;
+              }
+              if (data.type === "video_download_started") {
+                setStatus("Downloading video: " + (data.video_id || "pending"));
+                return;
+              }
+              if (data.type === "video_download_failed") {
+                setStatus("Download failed: " + (data.video_id || "unknown"));
+                return;
+              }
+              if (data.type === "set_video") {
+                handleSetVideo(data);
+              }
+            } catch(e) {
+              console.log("Parse error:", e);
+            }
+          };
+
+          ws.onclose = function() {
+            setStatus("Disconnected - reconnecting...");
+            setTimeout(connect, reconnectDelay);
+          };
+
+          ws.onerror = function(e) {
+            console.log("WebSocket error:", e);
+          };
+        } catch(e) {
+          console.log("Connection error:", e);
+          setTimeout(connect, reconnectDelay);
+        }
+      }
+
+      connect();
+    })();
+  </script>
+</body>
+</html>

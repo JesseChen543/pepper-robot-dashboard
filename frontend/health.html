@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Diagnostics - Pepper Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <a href="index.html" class="back-button-fixed">← Back</a>
+    <header>
+      <h1 class="page-title" style="text-align: center; margin-top: 40px;">System Diagnostics</h1>
+      <div class="header-right">
+        <div class="battery-indicator" id="battery-indicator" style="display: none;">
+          <div class="battery-icon">
+            <div class="battery-shell">
+              <div class="battery-fill"></div>
+            </div>
+            <div class="battery-tip"></div>
+          </div>
+          <span class="battery-percentage">--</span>
+        </div>
+        <div class="status-pill" id="status-pill">[--] Connecting...</div>
+      </div>
+    </header>
+
+    <section class="panel active">
+
+      <!-- System Overview -->
+      <div class="motion-category">
+        <h3>System Overview</h3>
+        <div class="health-grid">
+          <div class="health-card">
+            <div class="health-card-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm0-8h-2V7h2v2zm3 8h-2v-4h2v4zm0-6h-2V7h2v4z"/>
+              </svg>
+            </div>
+            <div class="health-card-content">
+              <h4>NAOqi Version</h4>
+              <p class="health-value" id="naoqi-version">--</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperature Monitoring -->
+      <div class="motion-category">
+        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+          <h3 style="margin: 0; flex: 1;">Temperature Monitoring</h3>
+          <button class="action-button action-button-secondary" id="refresh-button">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" style="width: 18px; height: 18px; margin-right: 6px;">
+              <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+            </svg>
+            Refresh Data
+          </button>
+        </div>
+        <div class="health-status-container" id="temp-container">
+          <p class="health-loading">Loading temperature data...</p>
+        </div>
+      </div>
+
+      <!-- Joint Status -->
+      <div class="motion-category">
+        <h3>Joint Status</h3>
+        <div class="health-table-container">
+          <table class="health-table" id="joints-table">
+            <thead>
+              <tr>
+                <th>Joint</th>
+                <th>Temp (°C)</th>
+                <th>Position (rad)</th>
+                <th>Stiffness</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="joints-tbody">
+              <tr>
+                <td colspan="5" class="health-loading">Loading joint data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="voice-bar">
+      <button class="voice-button" id="voice-button">
+        <span class="dot"></span>
+        HOLD TO TALK
+      </button>
+    </div>
+    <script src="js/pepper-utils.js"></script>
+    <script src="js/health.js"></script>
+  </body>
+</html>

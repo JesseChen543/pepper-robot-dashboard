@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>LEDs - Pepper Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <a href="index.html" class="back-button-fixed">← Back</a>
+    <header>
+      <h1 class="page-title" style="margin-top: 40px;">LED Studio</h1>
+      <div class="status-pill" id="status-pill">[--] Connecting...</div>
+    </header>
+
+    <section class="panel active">
+
+      <div class="led-grid">
+        <div class="led-card" data-led-card data-label="Eyes" data-groups="FaceLeds">
+          <div class="led-card-header">
+            <h2>Eyes</h2>
+            <span class="led-availability" data-led-status>Checking...</span>
+          </div>
+          <p class="led-description">Control Pepper's facial LEDs for expressive effects.</p>
+          <div class="led-actions">
+            <button class="led-btn" data-led-action="on">On</button>
+            <button class="led-btn" data-led-action="off">Off</button>
+            <button class="led-btn" data-led-action="fade" data-intensity="0.2" data-duration="0.6">Dim</button>
+            <button class="led-btn" data-led-action="fade" data-intensity="1.0" data-duration="0.6">Bright</button>
+            <button class="led-btn" data-led-action="rotate" data-color="#00aaff" data-duration="2">Spin Cyan</button>
+            <button class="led-btn" data-led-action="rotate" data-color="#ff00aa" data-duration="2">Spin Magenta</button>
+            <button class="led-btn" data-led-action="random">Random Color</button>
+          </div>
+        </div>
+
+        <div class="led-card" data-led-card data-label="Chest" data-groups="ChestLeds">
+          <div class="led-card-header">
+            <h2>Chest</h2>
+            <span class="led-availability" data-led-status>Checking...</span>
+          </div>
+          <p class="led-description">Set the chest LED color or adjust brightness.</p>
+          <div class="led-actions">
+            <button class="led-btn" data-led-action="on">On</button>
+            <button class="led-btn" data-led-action="off">Off</button>
+            <button class="led-btn" data-led-action="fade" data-intensity="0.4" data-duration="0.6">Dim</button>
+            <button class="led-btn" data-led-action="fade" data-intensity="1.0" data-duration="0.6">Bright</button>
+          </div>
+          <div class="led-swatches">
+            <button class="led-swatch" data-led-action="color" data-color="#ff3355" style="background-color: #ff3355;" title="Warm Red"></button>
+            <button class="led-swatch" data-led-action="color" data-color="#ffb400" style="background-color: #ffb400;" title="Amber"></button>
+            <button class="led-swatch" data-led-action="color" data-color="#34d399" style="background-color: #34d399;" title="Mint"></button>
+            <button class="led-swatch" data-led-action="color" data-color="#38bdf8" style="background-color: #38bdf8;" title="Sky"></button>
+            <button class="led-swatch" data-led-action="color" data-color="#818cf8" style="background-color: #818cf8;" title="Indigo"></button>
+            <button class="led-swatch" data-led-action="color" data-color="#f472b6" style="background-color: #f472b6;" title="Blush"></button>
+          </div>
+        </div>
+
+        <div class="led-card" data-led-card data-label="Ears" data-groups="EarLeds">
+          <div class="led-card-header">
+            <h2>Ears</h2>
+            <span class="led-availability" data-led-status>Checking...</span>
+          </div>
+          <p class="led-description">Showcase animations with Pepper's ring LEDs.</p>
+          <div class="led-actions">
+            <button class="led-btn" data-led-action="on">On</button>
+            <button class="led-btn" data-led-action="off">Off</button>
+            <button class="led-btn" data-led-action="fade" data-intensity="0.6" data-duration="0.8">Gentle Glow</button>
+            <button class="led-btn" data-led-action="fade" data-intensity="1.0" data-duration="0.8">Full Bright</button>
+            <button class="led-btn" data-led-action="rasta" data-duration="4">Trio Pulse</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="voice-bar">
+      <button class="voice-button" id="voice-button">
+        <span class="dot"></span>
+        HOLD TO TALK
+      </button>
+    </div>
+    <script src="js/pepper-utils.js"></script>
+    <script src="js/leds.js"></script>
+  </body>
+</html>

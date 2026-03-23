@@ -1,0 +1,245 @@
+          errorLog.style.display = "block";
+          errorLog.appendChild(entry);
+          console.error("[Frontend][Video]", message, detail);
+          updateDebugInfo({ lastError: message, detail: detailText });
+        }
+
+        function updateDebugInfo(extra) {
+          if (!debugInfo) {
+            return;
+          }
+          var info = [
+            "Page URL: " + window.location.href,
+            "Host: " + window.location.hostname,
+            "Protocol: " + window.location.protocol,
+            "User-Agent: " + window.navigator.userAgent,
+            "Screen: " + window.screen.width + "x" + window.screen.height,
+            "Video ID: " + (lastVideoId || "not set"),
+            "Video URL: " + (lastVideoUrl || "not set"),
+            "Iframe src: " + (player ? player.src : "n/a"),
+            "WebSocket: " + (ws ? (ws.readyState === 1 ? "open" : ws.readyState) : "not connected")
+          ];
+          if (extra && extra.lastError) {
+            info.push("Last error: " + extra.lastError);
+          }
+          if (extra && extra.detail) {
+            info.push("Error detail: " + extra.detail);
+          }
+          if (lastCspViolation) {
+            info.push("Last CSP violation: " + (lastCspViolation.directive || "n/a"));
+            info.push("Blocked URI: " + (lastCspViolation.blockedURI || "n/a"));
+          }
+          if (lastMessageType) {
+            info.push("Last WS message type: " + lastMessageType + (lastMessageCommand ? " (" + lastMessageCommand + ")" : ""));
+          }
+          if (lastMessageRaw) {
+            info.push("Last WS raw: " + lastMessageRaw);
+          }
+          debugInfo.textContent = info.join("\n");
+        }
+
+        function extractVideoId(url) {
+          var match = url && url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+          return match ? match[1] : null;
+        }
+
+        function scheduleIframeTimeout(videoId, embedUrl) {
+          clearTimeout(loadTimer);
+          loadTimer = setTimeout(function() {
+            appendError("Timed out waiting for video to load", { videoId: videoId, url: embedUrl });
+            setStatus("Timeout while loading video");
+          }, 8000);
+        }
+
+        function buildEmbedUrl(videoId) {
+          // Use youtube-nocookie for better old browser compatibility
+          var base = "https://www.youtube-nocookie.com/embed/" + videoId;
+          var params = [
+            "rel=0",
+            "modestbranding=1",
+            "playsinline=1",
+            "autoplay=1",
+            "controls=1",
+            "html5=1",
+            "enablejsapi=1"
+          ];
+          var origin = window.location.protocol + "//" + window.location.host;
+          params.push("origin=" + encodeURIComponent(origin));
+          return base + "?" + params.join("&");
+        }
+
+        function initializeFromIframe() {
+          if (!player || !player.src) {
+            return;
+          }
+          var match = player.src.match(/\/embed\/([^?]+)/);
+          if (match && match[1]) {
+            lastVideoId = match[1];
+            lastVideoUrl = "https://www.youtube.com/watch?v=" + lastVideoId;
+            updateDebugInfo();
+          }
+        }
+
+        function setVideo(videoId, originalUrl) {
+          if (!videoId || !player) {
+            return;
+          }
+          lastVideoId = videoId;
+          lastVideoUrl = originalUrl || ("https://youtube.com/watch?v=" + videoId);
+          var embedUrl = buildEmbedUrl(videoId);
+          player.src = embedUrl;
+          updateDebugInfo();
+          setStatus("Loading video: " + videoId);
+          scheduleIframeTimeout(videoId, embedUrl);
+          appendEvent("Loading video", { videoId: videoId, url: originalUrl }, { bold: true });
+        }
+
+        window.iframeLoaded = function() {
+          clearTimeout(loadTimer);
+          loadTimer = null;
+          setStatus(lastVideoId ? "Video ready: " + lastVideoId : "Video loaded");
+          updateDebugInfo();
+        };
+
+        window.iframeError = function(event) {
+          clearTimeout(loadTimer);
+          loadTimer = null;
+          setStatus("Video failed to load");
+          appendError("iframe failed to load content", event && (event.message || event.type || event));
+        };
+
+        function handleMessage(data) {
+          if (!data) {
+            appendEvent("Received unknown payload", data);
+            return;
+          }
+          lastMessageType = data.type || "unknown";
+          lastMessageCommand = data.command || null;
+          updateDebugInfo();
+
+          if (data.type !== "set_video" || !data.url) {
+            appendEvent("Ignoring non-video message", data);
+            return;
+          }
+          var id = extractVideoId(data.url);
+          if (id) {
+            setVideo(id, data.url);
+          } else {
+            appendError("Received URL without a valid YouTube ID", data.url);
+          }
+        }
+
+        function connect() {
+          try {
+            var host = window.location.hostname || "198.18.0.1";
+            setStatus("Connecting to controller...");
+            var wsTarget = "ws://" + host + ":9001";
+            appendEvent("Opening WebSocket", wsTarget, { bold: true });
+            ws = new WebSocket(wsTarget);
+
+            ws.onopen = function() {
+              setStatus("Connected. Waiting for video...");
+              appendEvent("WebSocket connected");
+              updateDebugInfo();
+            };
+
+            ws.onmessage = function(evt) {
+              lastMessageRaw = evt.data;
+              try {
+                var parsed = JSON.parse(evt.data);
+                appendEvent("WebSocket message", parsed);
+                handleMessage(parsed);
+              } catch (err) {
+                appendError("Failed to parse message from controller", err && err.message);
+                appendEvent("Raw message parse failed", evt.data, { color: "#f87171" });
+              }
+            };
+
+            ws.onerror = function(err) {
+              appendError("WebSocket error", err && (err.message || err.type || err));
+              appendEvent("WebSocket error", err && (err.message || err.type || err), { color: "#f87171" });
+              updateDebugInfo();
+            };
+
+            ws.onclose = function(evt) {
+              appendError("WebSocket closed", { code: evt.code, reason: evt.reason || "no reason" });
+              ws = null;
+              setStatus("Connection lost. Retrying in " + reconnectDelay / 1000 + "s...");
+               appendEvent("WebSocket closed", { code: evt.code, reason: evt.reason || "no reason" }, { color: "#f97316" });
+              updateDebugInfo();
+              setTimeout(connect, reconnectDelay);
+            };
+          } catch (err) {
+            appendError("WebSocket setup failed", err && err.message);
+            appendEvent("WebSocket setup failed", err && err.message, { color: "#f87171" });
+            setTimeout(connect, reconnectDelay);
+          }
+        }
+
+        window.addEventListener("error", function(evt) {
+          appendError("Runtime error", evt && (evt.message || evt.filename));
+        });
+
+        window.addEventListener("unhandledrejection", function(evt) {
+          appendError("Unhandled promise rejection", evt && evt.reason);
+        });
+
+        document.addEventListener("securitypolicyviolation", function(evt) {
+          var detail = {
+            directive: evt.effectiveDirective,
+            blockedURI: evt.blockedURI,
+            disposition: evt.disposition,
+            line: evt.lineNumber,
+            column: evt.columnNumber,
+            sample: evt.sample
+          };
+          lastCspViolation = detail;
+          appendError("Content Security Policy violation", detail);
+          appendEvent("CSP violation reported", detail, { color: "#f87171" });
+        });
+
+        function copyEventLog() {
+          var text = eventEntries.join("\n");
+          if (!text) {
+            appendError("Event log is empty", null);
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function() {
+              appendEvent("Event log copied to clipboard");
+            }).catch(function(err) {
+              appendError("Failed to copy log", err && err.message);
+            });
+          } else {
+            try {
+              var temp = document.createElement("textarea");
+              temp.value = text;
+              temp.style.position = "fixed";
+              temp.style.top = "-1000px";
+              document.body.appendChild(temp);
+              temp.focus();
+              temp.select();
+              var copied = document.execCommand("copy");
+              document.body.removeChild(temp);
+              if (copied) {
+                appendEvent("Event log copied to clipboard");
+              } else {
+                throw new Error("execCommand copy returned false");
+              }
+            } catch (err) {
+              appendError("Failed to copy log", err && err.message);
+            }
+          }
+        }
+
+        if (copyEventLogBtn) {
+          copyEventLogBtn.addEventListener("click", copyEventLog);
+        }
+
+        initializeFromIframe();
+        updateDebugInfo();
+        connect();
+      })();
+    </script>
+  </body>
+</html>

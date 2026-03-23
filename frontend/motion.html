@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Motion Library - Pepper Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <a href="index.html" class="back-button-fixed">← Back</a>
+    <header>
+      <h1 class="page-title" style="text-align: center; margin-top: 40px;">Motion Library</h1>
+      <div class="status-pill" id="status-pill">[--] Connecting...</div>
+    </header>
+
+    <section class="panel active">
+
+      <!-- Dances Category -->
+      <div class="motion-category dances-category">
+        <h3>🎉 Dances</h3>
+        <div class="motion-grid">
+          <button class="motion-card christmas-dance-card" type="button" data-dance="christmas" data-label="Christmas Dance">
+            <div class="dance-icon"><svg viewBox="0 0 24 24" width="32" height="32"><path fill="currentColor" d="M12 2L5 12h3l-2 4h3l-2 4h12l-2-4h3l-2-4h3L12 2zm0 3.5L15.5 10h-2l1.5 3h-2l1.5 3h-5l1.5-3h-2l1.5-3h-2L12 5.5zM11 20v2h2v-2h-2z"/></svg></div>
+            <strong>Christmas Dance</strong>
+            <small>20-second festive choreography with music and LED effects</small>
+            <div class="dance-duration">~20 seconds</div>
+          </button>
+          <button class="motion-card birthday-dance-card" type="button" data-dance="birthday" data-label="Birthday Dance">
+            <div class="dance-icon"><svg viewBox="0 0 24 24" width="32" height="32"><path fill="currentColor" d="M12 6c1.1 0 2-.9 2-2 0-.4-.1-.7-.3-1L12 0l-1.7 3c-.2.3-.3.6-.3 1 0 1.1.9 2 2 2zm4.6 9.6L15 14.2V13c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v1.2l-1.6 1.4c-.3.2-.4.6-.4.9V22h10v-5.5c0-.3-.1-.7-.4-.9zM18 9h-2V7h-1v2h-2V7h-2v2H9V7H8v2H6c-1.1 0-2 .9-2 2v2h16v-2c0-1.1-.9-2-2-2z"/></svg></div>
+            <strong>Birthday Dance</strong>
+            <small>30-second celebratory dance with Happy Birthday music</small>
+            <div class="dance-duration">~30 seconds</div>
+          </button>
+          <button class="motion-card kungfu-dance-card" type="button" data-dance="kungfu" data-label="Kung Fu Dance">
+            <div class="dance-icon"><svg viewBox="0 0 24 24" width="32" height="32"><path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3zm-1 4H8l-4 8h4l2-4 2 4h4l-4-8h-1zm6.5-2l1.5 3 2-1-2.5-3-1 1zm-11 0l-1 1-2.5 3 2 1 1.5-3z"/></svg></div>
+            <strong>Kung Fu Dance</strong>
+            <small>60-second dynamic Kung Fu performance with punches, strikes and traditional music</small>
+            <div class="dance-duration">~1 minute</div>
+          </button>
+          <button class="motion-card robot-dance-card" type="button" data-dance="robot" data-label="Robot Dance">
+            <div class="dance-icon">⚙</div>
+            <strong>Robot Dance</strong>
+            <small>30-second comedic robot dance with jerky movements, glitches and error modes</small>
+            <div class="dance-duration">~30 seconds</div>
+          </button>
+          <button class="motion-card gangnam-dance-card" type="button" data-dance="gangnam" data-label="Gangnam Style">
+            <div class="dance-icon">♪</div>
+            <strong>Gangnam Style</strong>
+            <small>40-second iconic horse-riding dance with lasso arms</small>
+            <div class="dance-duration">~40 seconds</div>
+          </button>
+          <button class="motion-card chacha-dance-card" type="button" data-dance="chacha" data-label="Cha Cha Slide">
+            <div class="dance-icon">~</div>
+            <strong>Cha Cha Slide</strong>
+            <small>55-second party dance with call-outs: slide, criss cross, cha cha!</small>
+            <div class="dance-duration">~55 seconds</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Greetings &amp; Etiquette</h3>
+        <div class="motion-grid">
+          <button class="motion-card" type="button" data-motion="hey" data-label="Hey There">
+            <strong>Hey There</strong>
+            <small>Playful greeting variations.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="bow" data-label="Bow">
+            <strong>Bow</strong>
+            <small>Polite introduction or thanks.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="salute" data-label="Salute">
+            <strong>Salute</strong>
+            <small>Smart salute for formal moments.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="ask_attention" data-label="Get Attention">
+            <strong>Get Attention</strong>
+            <small>Invite everyone to focus here.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="hug" data-label="Hug">
+            <strong>Hug</strong>
+            <small>Send a warm robotic hug.</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Emotions &amp; Mood</h3>
+        <div class="motion-grid">
+          <button class="motion-card" type="button" data-motion="angry" data-label="Angry">
+            <strong>Angry</strong>
+            <small>Express frustration safely.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="surprise" data-label="Surprised">
+            <strong>Surprised</strong>
+            <small>Big reactions to surprises.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="amused" data-label="Amused">
+            <strong>Amused</strong>
+            <small>Playful reaction to something funny.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="happy" data-label="Happy">
+            <strong>Happy</strong>
+            <small>Joyful poses to brighten the room.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="interested" data-label="Interested">
+            <strong>Interested</strong>
+            <small>Engaged listening stance.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="laugh" data-label="Laugh">
+            <strong>Laugh</strong>
+            <small>Light-hearted chuckle animation.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="mocker" data-label="Mocker">
+            <strong>Mocker</strong>
+            <small>Cheeky mocking gesture.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="sneeze" data-label="Sneeze">
+            <strong>Sneeze</strong>
+            <small>Cheeky "achoo!" moment.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="shy" data-label="Shy">
+            <strong>Shy</strong>
+            <small>Sweet bashful gesture.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="joy" data-label="Joy">
+            <strong>Joy</strong>
+            <small>Delighted body language.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="kisses" data-label="Kisses">
+            <strong>Kisses</strong>
+            <small>Send a flurry of kisses.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="whisper" data-label="Whisper">
+            <strong>Whisper</strong>
+            <small>Share secrets quietly.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="sad" data-label="Sad">
+            <strong>Sad</strong>
+            <small>Somber, reflective stance.</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Performances &amp; Celebration</h3>
+        <div class="motion-grid">
+          <button class="motion-card" type="button" data-motion="winner" data-label="Winner">
+            <strong>Winner</strong>
+            <small>Champion finishers.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="funny_dancer" data-label="Funny Dancer">
+            <strong>Funny Dancer</strong>
+            <small>Goofy freestyle moves.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="air_guitar" data-label="Air Guitar">
+            <strong>Air Guitar</strong>
+            <small>Rock out with invisible strings.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="bandmaster" data-label="Bandmaster">
+            <strong>Bandmaster</strong>
+            <small>Conduct the music groove.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="drink" data-label="Cheers">
+            <strong>Cheers</strong>
+            <small>Raise a toast with Pepper.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="call_someone" data-label="Call Someone">
+            <strong>Call Someone</strong>
+            <small>Dial up a friend dramatically.</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Gestures &amp; Tricks</h3>
+        <div class="motion-grid">
+          <button class="motion-card" type="button" data-motion="angry_gesture" data-label="Angry Gesture">
+            <strong>Angry Gesture</strong>
+            <small>Gesture-focused angry motion.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="shake" data-label="Shake">
+            <strong>Shake</strong>
+            <small>Whole-body shake reactions.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="touch_head" data-label="Touch Head">
+            <strong>Touch Head</strong>
+            <small>Interactive head touch response.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="hide" data-label="Hide">
+            <strong>Hide</strong>
+            <small>Peek-a-boo moment.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="hot" data-label="Too Hot">
+            <strong>Too Hot</strong>
+            <small>Fan off the heat!</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="stretch" data-label="Stretch">
+            <strong>Stretch</strong>
+            <small>Loosen up with stretches.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="show_muscles" data-label="Show Muscles">
+            <strong>Show Muscles</strong>
+            <small>Flex different power poses.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="scratch" data-label="Scratch">
+            <strong>Scratch</strong>
+            <small>Itchy scratch with playful TTS.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="relaxation" data-label="Relaxation">
+            <strong>Relaxation</strong>
+            <small>Slow, calming breathing loops.</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Adventure &amp; Characters</h3>
+        <div class="motion-grid">
+          <button class="motion-card" type="button" data-motion="flying" data-label="Flying">
+            <strong>Flying</strong>
+            <small>Blast off with Space Shuttle mode.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="take_picture" data-label="Take Picture">
+            <strong>Take Picture</strong>
+            <small>Strike a pose and snap a photo.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="taxi" data-label="Taxi">
+            <strong>Taxi</strong>
+            <small>Hail a ride in style.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="wake_up" data-label="Wake Up">
+            <strong>Wake Up</strong>
+            <small>Morning stretch to start the day.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="drive_car" data-label="Drive Car">
+            <strong>Drive Car</strong>
+            <small>Imaginary driving adventure.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="helicopter" data-label="Helicopter">
+            <strong>Helicopter</strong>
+            <small>Spin up the rotors.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="knock_eye" data-label="Knock Eye">
+            <strong>Knock Eye</strong>
+            <small>Quirky tap to the visor.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="robot" data-label="Robot">
+            <strong>Robot</strong>
+            <small>Playfully mimic a classic robot.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="monster" data-label="Monster">
+            <strong>Monster</strong>
+            <small>Spooky monster impression.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="mystical" data-label="Mystical Power">
+            <strong>Mystical Power</strong>
+            <small>Cast an imaginary spell.</small>
+          </button>
+          <button class="motion-card" type="button" data-motion="zombie" data-label="Zombie">
+            <strong>Zombie</strong>
+            <small>Shamble like the undead.</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="voice-bar">
+      <button class="voice-button" id="voice-button">
+        <span class="dot"></span>
+        HOLD TO TALK
+      </button>
+    </div>
+
+    <!-- Dance Status Popup -->
+    <div class="dance-popup" id="dance-popup" style="display: none;">
+      <div class="dance-popup-content">
+        <div class="dance-popup-icon">💃</div>
+        <h2 class="dance-popup-title" id="dance-popup-title">Performing Dance</h2>
+        <p class="dance-popup-message" id="dance-popup-message">Please wait...</p>
+        <button class="dance-stop-btn" id="dance-stop-btn">⏹ Stop Dance</button>
+      </div>
+    </div>
+
+    <script src="js/motion.js?v=3"></script>
+    <script src="js/dance-popup.js?v=5"></script>
+  </body>
+</html>

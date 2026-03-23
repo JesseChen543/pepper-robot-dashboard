@@ -1,0 +1,17 @@
+[Unit]
+Description=Pepper Main Application with Auto-Restart
+After=naoqi.service
+Requires=naoqi.service
+
+[Service]
+Type=simple
+User=nao
+WorkingDirectory=/home/nao
+ExecStart=/bin/bash /home/nao/start_main.sh 127.0.0.1 9559
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

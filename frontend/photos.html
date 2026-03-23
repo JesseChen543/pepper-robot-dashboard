@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Photos - Pepper Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+      .photos-container {
+        padding: 0;
+        margin: 0;
+        margin-top: -20px;
+      }
+
+      .photos-section {
+        margin-bottom: 20px;
+      }
+
+      .photos-section-header {
+        padding: 12px 15px;
+        font-size: 16px;
+        font-weight: bold;
+        color: rgba(248, 250, 252, 0.9);
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .photos-grid {
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+      }
+
+      .photo-item {
+        float: left;
+        width: 33.33%;
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .photo-item-inner {
+        position: relative;
+        width: 100%;
+        padding-bottom: 100%;
+        overflow: hidden;
+      }
+
+      .photo-item img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .photos-grid:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 100px 20px;
+        color: rgba(248, 250, 252, 0.5);
+      }
+
+      .empty-state svg {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        opacity: 0.3;
+        fill: rgba(248, 250, 252, 0.5);
+      }
+
+      .empty-state h3 {
+        margin: 0 0 10px 0;
+        font-size: 22px;
+        font-weight: bold;
+        color: rgba(248, 250, 252, 0.9);
+      }
+
+      .empty-state p {
+        margin: 0;
+        font-size: 16px;
+        color: rgba(248, 250, 252, 0.5);
+      }
+
+      .loading-state {
+        text-align: center;
+        padding: 100px 20px;
+        color: rgba(248, 250, 252, 0.5);
+        font-size: 16px;
+      }
+
+      .photo-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #000;
+        z-index: 1000;
+      }
+
+      .photo-modal.show {
+        display: block;
+      }
+
+      .photo-modal-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0 15px;
+        z-index: 1001;
+        line-height: 50px;
+      }
+
+      .photo-modal-close {
+        background: none;
+        border: none;
+        color: #4a9eff;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 0;
+        font-weight: bold;
+        line-height: 50px;
+      }
+
+      .photo-modal-content {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 60px;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .photo-modal-content img {
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .photo-modal-nav {
+        position: absolute;
+        top: 50%;
+        margin-top: -25px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid #fff;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        display: none;
+        line-height: 46px;
+        text-align: center;
+      }
+
+      .photo-modal-nav.prev {
+        left: 15px;
+      }
+
+      .photo-modal-nav.next {
+        right: 15px;
+      }
+
+      .photo-modal-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        color: rgba(248, 250, 252, 0.9);
+        font-size: 13px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .photo-info-title {
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .photo-info-details {
+        color: rgba(248, 250, 252, 0.5);
+      }
+
+      .voice-bar {
+        display: none;
+      }
+
+      .photo-modal-download {
+        background: none;
+        border: none;
+        color: #22c55e;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 0 0 0 15px;
+        font-weight: bold;
+        line-height: 50px;
+      }
+
+      .qr-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1100;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .qr-modal.show {
+        display: flex;
+      }
+
+      .qr-modal-card {
+        background: #1f2937;
+        border-radius: 12px;
+        padding: 24px 28px;
+        max-width: 320px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      .qr-modal-card h3 {
+        margin: 0 0 12px 0;
+        color: #f9fafb;
+        font-size: 18px;
+      }
+
+      .qr-modal-card p {
+        margin: 0 0 18px 0;
+        color: rgba(229, 231, 235, 0.75);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .qr-image-wrapper {
+        background: #111827;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        display: inline-block;
+      }
+
+      .qr-image-wrapper img {
+        width: 220px;
+        height: 220px;
+        display: block;
+      }
+
+      .qr-modal-close {
+        margin-top: 6px;
+        background: none;
+        border: none;
+        color: #60a5fa;
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .download-all-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 15px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        z-index: 100;
+        display: none;
+      }
+
+      .download-all-button:active {
+        transform: scale(0.95);
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" class="back-button-fixed">← Back</a>
+    <header>
+      <h1 class="page-title" style="text-align: center; margin-top: 40px;">Photos</h1>
+      <div class="status-pill" id="status-pill">[--] Connecting...</div>
+    </header>
+
+    <section class="panel active">
+      <div class="panel-header">
+        <a href="index.html" class="back-button"></a>
+      </div>
+
+      <div class="photos-container">
+        <div id="loading-state" class="loading-state">
+          Loading...
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+          <h3>No Photos</h3>
+          <p>Use the Camera app to take photos with Pepper.</p>
+        </div>
+
+        <div id="photos-sections"></div>
+      </div>
+    </section>
+
+    <button id="download-all-btn" class="download-all-button">📦 Download All</button>
+
+    <div id="photo-modal" class="photo-modal">
+      <div class="photo-modal-header">
+        <button class="photo-modal-close" id="modal-close">Done</button>
+        <button class="photo-modal-download" id="modal-download">Download</button>
+      </div>
+      <div class="photo-modal-content" id="modal-content">
+      </div>
+    </div>
+    <div id="qr-modal" class="qr-modal">
+      <div class="qr-modal-card">
+        <h3>Scan To Download</h3>
+        <p>Open your camera app and scan the QR code to download this photo.</p>
+        <div class="qr-image-wrapper">
+          <img id="qr-image" src="" alt="QR code for photo download">
+        </div>
+        <button class="qr-modal-close" id="qr-close">Close</button>
+      </div>
+    </div>
+    <script src="js/photos.js"></script>
+  </body>
+</html>

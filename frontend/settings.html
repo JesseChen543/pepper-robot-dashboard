@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Settings - Pepper Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <a href="index.html" class="back-button-fixed">← Back</a>
+    <header>
+      <h1 class="page-title" style="text-align: center; margin-top: 40px;">Settings</h1>
+      <div class="status-pill" id="status-pill">[--] Connecting...</div>
+    </header>
+
+    <section class="panel active">
+
+      <div class="motion-category">
+        <h3>Voice Controls</h3>
+        <div class="settings-grid" style="display: block;">
+          <div class="settings-card" style="margin-bottom: 36px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Volume</h4>
+                <p class="settings-card-subtitle">Adjust Pepper&rsquo;s speaking loudness.</p>
+              </div>
+              <span class="settings-value" id="volume-display">--%</span>
+            </div>
+            <input id="volume-slider" class="settings-slider" type="range" min="0" max="100" step="1" value="50" aria-label="Pepper voice volume">
+            <div class="settings-hint">0% mute &mdash; 100% max</div>
+          </div>
+
+          <div class="settings-card" style="margin-bottom: 36px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Speed</h4>
+                <p class="settings-card-subtitle">Control speech rate for conversations.</p>
+              </div>
+              <span class="settings-value" id="speed-display">--%</span>
+            </div>
+            <input id="speed-slider" class="settings-slider" type="range" min="50" max="200" step="1" value="100" aria-label="Pepper speech speed">
+            <div class="settings-hint">50% slow &mdash; 200% fast</div>
+          </div>
+
+          <div class="settings-card" style="margin-bottom: 36px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Pitch</h4>
+                <p class="settings-card-subtitle">Fine-tune vocal tone to match the moment.</p>
+              </div>
+              <span class="settings-value" id="pitch-display">--&times;</span>
+            </div>
+            <input id="pitch-slider" class="settings-slider" type="range" min="50" max="400" step="1" value="100" aria-label="Pepper speech pitch">
+            <div class="settings-hint">0.5&times; deep &mdash; 4.0&times; bright</div>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button type="button" class="settings-button" id="voice-reset-button">
+            Reset to Conversational Defaults
+          </button>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Voice Interaction Mode</h3>
+        <div class="settings-grid" style="display: block;">
+          <div class="settings-card" style="margin-bottom: 36px;">
+            <div class="settings-card-heading" style="margin-bottom: 20px;">
+              <div>
+                <h4>Conversation Style</h4>
+                <p class="settings-card-subtitle">Choose how you want to interact with Pepper.</p>
+              </div>
+            </div>
+            <div class="mode-selector">
+              <div class="mode-option" id="mode-manual" data-mode="manual">
+                <input type="radio" name="voice-mode" id="radio-manual" value="manual" checked>
+                <label for="radio-manual">
+                  <div class="mode-title">Tap to Talk</div>
+                  <div class="mode-description">Manual operation to start or stop. Allows interruption.</div>
+                </label>
+              </div>
+              <div class="mode-option" id="mode-realtime" data-mode="realtime">
+                <input type="radio" name="voice-mode" id="radio-realtime" value="realtime">
+                <label for="radio-realtime">
+                  <div class="mode-title">Realtime Mode</div>
+                  <div class="mode-description">Automatic conversation. Does not allow interruption.</div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>Robot Behavior</h3>
+        <div class="settings-grid" style="display: block;">
+          <div class="settings-card settings-card-toggle" style="margin-bottom: 36px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Head Tracking</h4>
+                <p class="settings-card-subtitle">Automatically follow and look at people.</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="head-tracking-toggle" aria-label="Enable head tracking">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-hint">When enabled, Pepper will track faces and follow people with head movement.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="motion-category">
+        <h3>System</h3>
+        <div class="settings-grid" style="display: block;">
+          <div class="settings-card" style="margin-bottom: 24px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Rest Mode</h4>
+                <p class="settings-card-subtitle">Put Pepper into low-power rest mode.</p>
+              </div>
+            </div>
+            <div class="settings-hint" style="margin-bottom: 16px;">This will relax all motors and put Pepper in a resting position. Pepper will remain powered on but motors will be relaxed to conserve energy.</div>
+            <button type="button" class="rest-button" id="rest-button">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" style="width: 20px; height: 20px; margin-right: 8px;">
+                <path d="M21 10.78V8c0-1.65-1.35-3-3-3h-4c-.77 0-1.47.3-2 .78-.53-.48-1.23-.78-2-.78H6C4.35 5 3 6.35 3 8v2.78c-.61.55-1 1.34-1 2.22v6h2v-2h16v2h2v-6c0-.88-.39-1.67-1-2.22zM14 7h4c.55 0 1 .45 1 1v2h-6V8c0-.55.45-1 1-1zM5 8c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v2H5V8zm-1 9v-4h16v4H4z"/>
+              </svg>
+              Enter Rest Mode
+            </button>
+          </div>
+          <div class="settings-card" style="margin-bottom: 24px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Restart Services</h4>
+                <p class="settings-card-subtitle">Restart all control services to apply updates or fix issues.</p>
+              </div>
+            </div>
+            <div class="settings-hint" style="margin-bottom: 16px;">This will restart the control application and reconnect all services. Pepper will be unavailable for about 10-15 seconds.</div>
+            <button type="button" class="restart-button" id="restart-button">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" style="width: 20px; height: 20px; margin-right: 8px;">
+                <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+              </svg>
+              Restart Services
+            </button>
+          </div>
+          <div class="settings-card" style="margin-bottom: 24px;">
+            <div class="settings-card-heading">
+              <div>
+                <h4>Reboot Robot</h4>
+                <p class="settings-card-subtitle">Completely restart Pepper's operating system.</p>
+              </div>
+            </div>
+            <div class="settings-hint" style="margin-bottom: 16px;">This will reboot the entire robot. All services will stop and Pepper will be unavailable for about 60-90 seconds.</div>
+            <button type="button" class="reboot-button" id="reboot-button">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" style="width: 20px; height: 20px; margin-right: 8px;">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" opacity="0.3"/>
+              </svg>
+              Reboot Pepper Robot
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="voice-bar">
+      <button class="voice-button" id="voice-button">
+        <span class="dot"></span>
+        HOLD TO TALK
+      </button>
+    </div>
+    <script src="js/pepper-utils.js"></script>
+    <script src="js/settings.js"></script>
+  </body>
+</html>

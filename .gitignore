@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+venv_pepper/
+env/
+ENV/
+
+# Environment / secrets
+.env
+*.env.local
+
+# Captured photos — never commit
+frontend/photos/*.jpg
+frontend/photos/*.jpeg
+frontend/photos/*.png
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Audio/video files
+*.wav
+*.mp3
+*.mp4
+*.avi
+*.raw
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+*.bak
+temp/
+tmp/
