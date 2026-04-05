@@ -154,6 +154,10 @@ The backend proxy (`pepper_control/youtube_proxy.py`) and CSP-aware HTTP server 
 | Camera + gallery | [pepper-robot-camera](https://github.com/JesseChen543/pepper-robot-camera) |
 | YouTube player | [pepper-youtube-player](https://github.com/JesseChen543/pepper-youtube-player) |
 
+## Keywords
+
+`pepper robot` `softbank pepper` `naoqi` `naoqi python` `pepper dashboard` `robot dashboard` `pepper control panel` `robot web interface` `pepper tablet` `robot remote control` `humanoid robot` `social robot` `python robotics` `websocket` `pepper robot controller`
+
 ## License
 
 MIT
