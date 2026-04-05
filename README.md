@@ -7,7 +7,7 @@ The central control dashboard for **SoftBank Pepper Robot** (NAOqi 2.5). A unifi
 - **Motion control** — joystick and arrow button driving
 - **Camera** — photo capture with countdown + gallery
 - **LED control** — eye and chest animations and colours
-- **Realtime voice** — OpenAI Realtime API integration (via WonderConnect)
+- **Realtime voice** — OpenAI Realtime API integration (via realtime backend)
 - **Video streaming** — real-time camera feed via RTP/TCP
 - **Health monitoring** — battery, CPU, memory, temperature
 - **Dance launcher** — trigger choreographed routines
@@ -22,7 +22,7 @@ main.py  (orchestrator — runs on Pepper)
 ├── HTTP server :8080  ──→  frontend/ served to tablet & browser
 ├── WebSocket :9001    ←→  browser sends commands
 ├── Video stream :5000 ──→  TCP camera feed
-└── Voice module       ──→  WonderConnect realtime API
+└── Voice module       ──→  Realtime API backend
 ```
 
 ## Quick Start
@@ -39,9 +39,9 @@ PC_IP     = "192.168.x.x"   # Your PC's IP (for video stream destination)
 ### 2. Set voice credentials (optional)
 
 ```bash
-export WONDERCONNECT_WS_URL="ws://your-backend.example.com/ws/realtime"
-export WONDERCONNECT_CLIENT_IDENTITY="your-client-identity"
-export WONDERCONNECT_CLIENT_SECRET="your-client-secret-key"
+export REALTIME_WS_URL="ws://your-backend.example.com/ws/realtime"
+export REALTIME_CLIENT_IDENTITY="your-client-identity"
+export REALTIME_CLIENT_SECRET="your-secret"
 ```
 
 ### 3. Upload to Pepper and run
@@ -116,6 +116,16 @@ pepper-main/
 └── requirements-pc.txt
 ```
 
+## YouTube Player
+
+The dashboard includes a YouTube player (`frontend/video_player.html`) that plays videos directly on Pepper's tablet.
+
+Pepper's tablet runs an older version of Android with a restricted WebView, so **YouTube iframes do not work**. This implementation uses an external YouTube downloader API to fetch a direct video stream URL, which is then played via an HTML5 `<video>` element.
+
+> **Note:** If your Pepper runs a newer Android WebView that supports iframes, feel free to swap in a standard YouTube iframe embed — it will be simpler and more reliable.
+
+The backend proxy (`pepper_control/youtube_proxy.py`) and CSP-aware HTTP server (`pepper_control/http_server_csp.py`) handle the URL resolution and correct headers required for playback.
+
 ## Ports
 
 | Port | Service |
@@ -138,10 +148,11 @@ pepper-main/
 | Feature | Repo |
 |---------|------|
 | Dance routines | [naoqi-robot-dance](https://github.com/JesseChen543/naoqi-robot-dance) |
-| Movement control | `pepper-movement` |
-| Voice / Realtime API | `pepper-voice` |
-| LED control | `pepper-led` |
-| Camera + gallery | `pepper-camera` |
+| Movement control | [pepper-motion-control](https://github.com/JesseChen543/pepper-motion-control) |
+| Voice / Realtime API | [pepper-realtime-voice](https://github.com/JesseChen543/pepper-realtime-voice) |
+| LED control | [pepper-led-control](https://github.com/JesseChen543/pepper-led-control) |
+| Camera + gallery | [pepper-robot-camera](https://github.com/JesseChen543/pepper-robot-camera) |
+| YouTube player | [pepper-youtube-player](https://github.com/JesseChen543/pepper-youtube-player) |
 
 ## License
 
